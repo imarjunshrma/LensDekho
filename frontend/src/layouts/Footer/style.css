@@ -1,0 +1,21 @@
+.footer {
+    background-color: whitesmoke;
+    padding: 20px 0;
+}
+
+.footer>div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.footer ul {
+    display: flex;
+    gap: 10px;
+}
+
+.footer ul li a {
+    color: black;
+    font-size: 20px;
+}

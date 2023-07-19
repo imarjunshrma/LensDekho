@@ -1,0 +1,42 @@
+.p-hero img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.product-section .thead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between
+}
+
+.p-products {
+    margin: 20px 0;
+}
+
+.thead .drp {
+    display: flex;
+    gap: 20px;
+}
+
+.thead .drp select,
+.thead .drp .r-sidebar {
+    cursor: pointer;
+    border: none;
+    outline: none;
+    box-shadow: 0 0 10px rgb(187 187 187 / 30%);
+    background-color: white;
+    padding: 4px 8px;
+}
+
+.thead .drp .r-sidebar {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    justify-content: center;
+}
+
+.thead .drp .fill-rsidebar {
+    background-color: black;
+    color: white;
+}
