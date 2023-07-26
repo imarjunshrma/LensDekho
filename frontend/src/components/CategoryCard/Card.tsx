@@ -7,7 +7,11 @@ interface Props {
 const Card = ({ title, img }: Props) => {
   const navigate = useNavigate();
   return (
-    <div className="c-card" onClick={() => navigate('/products')}>
+    <div className="c-card" onClick={() => navigate('/products', {
+      state: {
+        title
+      }
+    })}>
       <div className="overlay">
       </div>
       <div className="image">

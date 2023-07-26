@@ -21,7 +21,7 @@ const HeroSection = () => {
           </div>
           <div className="col-6">
             <div className='img'>
-              <img src="https://eyesome.netlify.app/static/media/bannerImg.712fc34e6a2084115f10.png" alt="" />
+              <img src="/pexels-shane-aldendorff-1054777.jpg" alt="" />
             </div>
           </div>
         </div>

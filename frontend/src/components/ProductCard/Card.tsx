@@ -3,6 +3,11 @@ import './style.css';
 import { addToBag } from '../../features/cartSlice';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
+import { useState } from 'react';
+import ButtonSpinner from '../../layouts/spinner/ButtonSpinner';
+import Toast from '../../layouts/toast/Toast';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 export interface ApiResponse {
     brand: string,
     category: string,
@@ -18,13 +23,24 @@ export interface ApiResponse {
     weight: string,
     _id: string
 }
-const Card = (data: ApiResponse) => {
+const Card = (data: Partial<ApiResponse>) => {
     const { name, category, image, price, newPrice, rating } = data;
+    const [isLoading, setIsLoading] = useState<boolean>(false)
     const dispatch = useDispatch()
     const val = useSelector(state => state.data)
-    // console.log(val)
+    const navigate = useNavigate()
+    const onClick = async (data: ApiResponse) => {
+        setIsLoading(true);
+        await new Promise((resolve) => setTimeout(resolve, 400))
+        dispatch(addToBag(data))
+        toast("Item has been added in cart")
+        setIsLoading(false)
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        navigate("/cart");
+    }
     return (
         <>
+            <Toast />
             <div className='pr-card-container my-4'>
                 <div className="card pr-cards">
                     <div className="image">
@@ -58,8 +74,8 @@ const Card = (data: ApiResponse) => {
                         </div>
                         <hr />
                         <div className="last">
-                            <button className="rm-bag" onClick={() => dispatch(addToBag(data))}>
-                                Add to Bag
+                            <button className="rm-bag" onClick={() => onClick(data)}>
+                                {isLoading ? <ButtonSpinner /> : "Add to Bag"}
                             </button>
                             <i className='wishlist'>
                                 <BsBookmarkHeart />

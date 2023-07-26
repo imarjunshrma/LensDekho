@@ -37,12 +37,23 @@ const getLensesDataByFilter = async (req, res) => {
     filter.category = category;
   }
   if (gender) {
-    filter.gender = gender;
+    if (!gender === "All") {
+      filter.gender = gender;
+    }
   }
   if (rating) {
     filter.rating = { $gte: Number(rating) };
   }
   if (price) {
+    let minPrice = 0;
+    let maxPrice = 0;
+    if (parseInt(price) < 2499) {
+      maxPrice = 2499;
+      minPrice = parseInt(price);
+    } else {
+      minPrice = 2499;
+      maxPrice = parseInt(price);
+    }
     filter.price = { $gte: Number(minPrice), $lte: Number(maxPrice) };
   }
 

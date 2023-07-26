@@ -12,6 +12,7 @@ body {
     background-color: var(--theme-color) !important;
     font-size: 16px;
     overflow-x: hidden;
+    margin-top: 80px !important;
 }
 
 p {
@@ -45,3 +46,10 @@ a {
         max-width: 1020px !important;
     }
 } */
+
+.load-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 70px);
+}

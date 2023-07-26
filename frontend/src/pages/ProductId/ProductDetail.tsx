@@ -5,6 +5,8 @@ import { BsBookmarkHeart } from "react-icons/bs";
 import { useParams } from 'react-router-dom';
 import axios, { AxiosResponse } from 'axios';
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { addToBag } from '../../features/cartSlice';
 interface ApiResponse {
     brand: string,
     category: string,
@@ -23,7 +25,7 @@ interface ApiResponse {
 const ProductDetail = () => {
     const { id } = useParams<{ id: string | undefined }>()
     const [data, setData] = useState<ApiResponse[] | []>([])
-
+    const dispatch = useDispatch()
     useEffect(() => {
         const fetchProducts = async (): Promise<void> => {
             try {
@@ -77,7 +79,7 @@ const ProductDetail = () => {
                                             <span className='cross-price'>₹{val.price}</span></p>
                                         <div className='btn-container_'>
                                             {/* <button className="add-bag">Add to Bag</button> */}
-                                            <a href="" className="add-bag">
+                                            <a className="add-bag" onClick={() => dispatch(addToBag(val))}>
                                                 <span><HiOutlineShoppingBag /></span>
                                                 <span>
                                                     Add to Bag

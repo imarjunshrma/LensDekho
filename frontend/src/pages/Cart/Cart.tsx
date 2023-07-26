@@ -2,10 +2,15 @@ import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai'
 import { BsBookmarkHeart } from "react-icons/bs";
 import './style.css';
 import { useSelector } from 'react-redux';
+import { useMemo } from 'react'
+import { useDispatch } from 'react-redux';
+import { removeItemFromBag } from '../../features/cartSlice';
+
 
 const CartCard = (data) => {
   // console.log(data)
-  const { image, name, price, newPrice } = data.data;
+  const { image, name, price, newPrice, count, id } = data.data;
+  const dispatch = useDispatch();
   return (
     <div className="cart-card my-4">
       <div className="card_items">
@@ -21,7 +26,7 @@ const CartCard = (data) => {
                 <i><AiOutlineMinus /></i>
               </span>
               <span className='count'>
-                1
+                {count}
               </span>
               <span>
                 <i><AiOutlinePlus /></i>
@@ -30,7 +35,7 @@ const CartCard = (data) => {
             </div>
           </div>
           <div className="last">
-            <button className="rm-bag">
+            <button className="rm-bag" onClick={() => dispatch(removeItemFromBag(id))}>
               Remove From Bag
             </button>
             <i className='wishlist'>
@@ -48,19 +53,33 @@ const CartCard = (data) => {
   )
 }
 
-const PriceCard = () => {
+const PriceCard = ({ data }) => {
+
+  const total = useMemo(() => {
+    let total = data?.reduce((current, val) => current + val.count * val.newPrice, 0)
+    return total;
+  }, [data]);
+  // console.log(total)
   return (
     <div className='price-card'>
       <h4>Price Details</h4>
-      <div>
-        <p>Alder Street (1)item</p>
-        <p>₹ 2000</p>
-      </div>
+      {
+        data?.map(val => {
+          const { name, newPrice, count } = val;
+          return (
+            <div>
+              <p>{name} ({count})item</p>
+              <p>₹ {count * newPrice}</p>
+            </div>
+          )
+        })
+      }
+
       {/* <div className="line"></div> */}
       <hr />
       <div className="total">
         <p>Total</p>
-        <p>₹ 3199</p>
+        <p>₹ {total}</p>
       </div>
       <div>
         <button>Proceed to Checkout</button>
@@ -70,7 +89,7 @@ const PriceCard = () => {
 }
 const Cart = () => {
   const value = useSelector(state => state.cart.data)
-  console.log(value)
+
   return (
     <>
       <div className="cart-section">
@@ -79,16 +98,17 @@ const Cart = () => {
           <div className="bag-items">
             <div className='first'>
               {
-                value.map(val => {
-                  const { name, price, newPrice, image } = val;
+                value?.map(val => {
+                  const { name, price, newPrice, image, count, id } = val;
                   return (
-                    <CartCard data={{ name, price, newPrice, image }} />
+                    <CartCard data={{ name, price, newPrice, image, count, id }} />
                   )
                 })
               }
             </div>
             <div className="price-details">
-              <PriceCard />
+              <PriceCard data={value} />
+
             </div>
           </div>
         </div>

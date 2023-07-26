@@ -24,8 +24,8 @@ const Header = () => {
                 </div>
                 <div className="items_">
                     <div className='explore_div'>
-                        <button className="explore">
-                            Explore
+                        <button className="explore" onClick={() => navigate("/products")}>
+                            Products
                         </button>
                     </div>
 
@@ -34,7 +34,9 @@ const Header = () => {
                             <BsBookmarkHeart />
                         </li>
                         <li>
-                            {value.length}
+                            {/* <span>
+                                {value.length}
+                            </span> */}
                             <i className="cart" onClick={() => navigate('/cart')}>
                                 <HiOutlineShoppingBag />
                             </i>

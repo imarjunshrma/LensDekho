@@ -12,31 +12,49 @@ const cartSlice = createSlice({
     initialState,
     reducers: {
         addToBag: (state, action: PayloadAction<unknown>) => {
-            if (!state.data.length) {
-                let nx = { ...action.payload, count: 1 }
-                state.data.push(action.payload);
-                return;
-            }
-            //
-            for (let val of state.data) {
-                if (val.id === action.payload.id) {
-                    let cx = val.count;
-                    console.log(cx)
-                    val.count = cx + 1;
-                } else {
-                    let nx = { ...action.payload, count: 1 }
-                    state.data.push(action.payload);
-                }
+            const existingProduct = state.data.find((val) => val.id === action.payload.id);
+
+            if (existingProduct) {
+                const updatedData = state.data.map((val) => {
+                    if (val.id === action.payload.id) {
+                        return { ...val, count: val.count + 1 };
+                    }
+                    return val;
+                });
+                state.data = updatedData;
+            } else {
+                state.data.push({ ...action.payload, count: 1 });
             }
 
         },
         removeToBag: (state, action: PayloadAction<unknown>) => {
-            const nxState = state.data.filter(val => val.id !== action.id)
-            state.data.length = 0;
-            state.data.push(nxState);
+            if (!state.data.length) return;
+            const existingProduct = state.data.find((val) => val.id === action.payload.id);
+            if (!existingProduct) return;
+            // let updatedData = state.data.filter(val => val.id !== action.payload.id)
+            const updatedData = state.data.map(val => {
+                if (val.id === action.payload.id) {
+                    if (val.count >= 1) {
+                        return { ...val, count: val.count - 1 }
+                    }
+                    return;
+                    // return {...val,val.count>1?val.count-1:0}
+                }
+            })
+            state.data = updatedData;
+        },
+        removeItemFromBag: (state, action: PayloadAction<unknown>) => {
+            if (!state.data.length) return;
+            const existingProduct = state.data.find((val) => val.id === action.payload);
+            // console.log(existingProduct)
+            // console.log(action.payload)
+            if (!existingProduct) return;
+            const updatedData = state.data.filter(val => val.id !== action.payload);
+            // console.log(updatedData)
+            state.data = updatedData
         }
     }
 })
 
 export default cartSlice.reducer;
-export const { addToBag, removeToBag } = cartSlice.actions;
+export const { addToBag, removeToBag, removeItemFromBag } = cartSlice.actions;

@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Key, useRef } from 'react';
 import Card from '../../components/ProductCard/Card';
 import Sidebar from '../../layouts/sidebar/Sidebar';
 import './style.css';
 import { IoFilterSharp } from 'react-icons/io5'
 import axios, { AxiosResponse } from 'axios';
-interface FilterParams {
+import { Location, useLocation } from 'react-router-dom';
+export interface FilterParams {
   gender?: string;
   category?: string;
   rating?: string;
@@ -25,13 +26,29 @@ interface ApiResponse {
   weight: string,
   _id: string
 }
+export interface QueryTuple {
+  gender: string,
+  category: string,
+  rating: string,
+  price: string
+}
+
+
 const Product = () => {
   const [isOpenSidebar, setIsOpenSidebar] = useState<boolean>(false)
   const [data, setData] = useState<ApiResponse[] | []>([])
+  const location: Location = useLocation();
+  const ref = useRef<ApiResponse[]>();
+  const [query, setQuery] = useState<QueryTuple>({
+    gender: "All",
+    category: "",
+    rating: "",
+    price: ""
+  })
+  // console.log(location.state.title)
   const fetchProducts = async (): Promise<void> => {
     try {
       const res: AxiosResponse<{ msg: ApiResponse[] }> = await axios.get<{ msg: ApiResponse[] }>("http://localhost:3002/lens")
-      console.log(res)
       if (res.data.msg?.length > 0) {
         setData(res.data.msg);
       }
@@ -48,34 +65,62 @@ const Product = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const filterByQuery = async (el: FilterParams) => {
-    let url = 'http://localhost:3002/lens?';
-    if (el.gender) {
-      url += `gender=${el.gender}&`;
+  useEffect(() => {
+    if (location) {
+      const val: string = location.state;
+      if (!val) return;
+      setQuery({ ...query, category: val.title })
     }
-    if (el.category) {
-      url += `category=${el.category}&`;
-    }
-    if (el.rating) {
-      url += `rating=${el.rating}&`;
-    }
-    if (el.price) {
-      url += `price=${el.price}&`;
-    }
-    url = url.slice(0, -1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location])
+  const fetchProductByQuery = async (url: string): Promise<void> => {
     try {
-      console.log(url)
       const res: AxiosResponse<{ msg: ApiResponse[] }> = await axios.get<{ msg: ApiResponse[] }>(url)
-      console.log(res)
-      if (res.data.msg?.length > 0) {
+      if (res.data.msg?.length >= 0) {
         setData(res.data.msg);
+        ref.current = res.data.msg;
       }
-      // setData(res.data);
     } catch (err) {
       console.log(err)
     }
   }
+  useEffect(() => {
+    if (!query) {
+      return;
+    }
+    let url = 'http://localhost:3002/lens?';
+    if (query.gender) {
+      url += `gender=${query.gender}&`
+    }
+    if (query.category) {
+      url += `category=${query.category}&`;
+    }
+    if (query.rating) {
+      url += `rating=${query.rating}&`;
+    }
+    if (query.price) {
+      url += `price=${query.price}&`;
+    }
+    url = url.slice(0, -1);
+    void fetchProductByQuery(url)
+  }, [query])
   // console.log(data)
+
+  const sortData = (x: string) => {
+    //x-->0 no sort
+    //x-->1-->low to high
+    //x-->-1-->high to low
+    console.log(ref)
+    if (Number(x) === 1) {
+      const nx = data.slice().sort((a, b) => a.newPrice - b.newPrice);//slice is using sothat original array could't modified
+      setData(nx);
+    } else if (Number(x) === -1) {
+      const nx = data.slice().sort((a, b) => b.newPrice - a.newPrice);//slice is using sothat original array could't modified
+      setData(nx)
+    } else {
+      setData(ref.current);
+    }
+  }
   return (
     <>
       <div className="product-section">
@@ -88,10 +133,10 @@ const Product = () => {
               <h3>Glasses For You !</h3>
               <div className="drp">
 
-                <select className="selectpicker">
-                  <option>Sort By Price</option>
-                  <option>Low to High</option>
-                  <option>High to Low</option>
+                <select className="selectpicker" onChange={(e) => sortData(e.target.value)}>
+                  <option value={0}>Sort By Price</option>
+                  <option value={1}>Low to High</option>
+                  <option value={-1}>High to Low</option>
                 </select>
                 <button className={`r-sidebar ${isOpenSidebar ? "fill-rsidebar" : ""}`} onClick={() => setIsOpenSidebar(!isOpenSidebar)}>
                   <IoFilterSharp />
@@ -102,11 +147,11 @@ const Product = () => {
             <div className="p-cards_">
               <div className="row">
                 {
-                  data.map((val: ApiResponse) => {
+                  data.map((val: Partial<ApiResponse>) => {
                     const { name, category, price, image, _id, description, rating, gender, quantity, newPrice, weight } = val;
                     return (
                       <div className="col-lg-3 px-0">
-                        <Card name={name} category={category} price={price} image={image} id={_id} description={description}
+                        <Card name={name} category={category} price={price} image={image} _id={_id} description={description}
                           rating={rating} gender={gender} quantity={quantity} newPrice={newPrice}
                           weight={weight}
                         />
@@ -121,7 +166,7 @@ const Product = () => {
         </div>
       </div>
       {
-        isOpenSidebar && <Sidebar setIsOpenSidebar={setIsOpenSidebar} filterByQuery={filterByQuery} />
+        isOpenSidebar && <Sidebar setIsOpenSidebar={setIsOpenSidebar} query={query} setQuery={setQuery} />
       }
 
     </>
