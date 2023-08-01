@@ -40,3 +40,7 @@
     background-color: black;
     color: white;
 }
+
+.active-wishlist svg {
+    fill: red;
+}

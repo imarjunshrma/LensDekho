@@ -56,15 +56,30 @@
 }
 
 .items li {
+    position: relative;
+}
+
+.items li span {
+    position: absolute;
+    top: -12px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    display: inline-block;
+    text-align: center;
+}
+
+.items li i {
     border-radius: 50%;
     list-style: none;
     padding: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 }
 
-.items li svg {
+.items li i svg {
     font-size: 23px;
 }
 

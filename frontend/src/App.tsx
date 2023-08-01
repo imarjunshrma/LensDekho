@@ -11,9 +11,9 @@ import Spinner from './layouts/spinner/Spinner';
 function App() {
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
-    setIsLoading(true);
+    // setIsLoading(true);
     setTimeout(() => {
-      setIsLoading(false)
+      // setIsLoading(false)
     }, 6000)
   }, [])
   return (

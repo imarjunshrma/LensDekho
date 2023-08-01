@@ -55,3 +55,7 @@
 .pr-cards .line {
     border: 1px solid #eaeae8;
 }
+
+.pr-cards .wishlist {
+    cursor: pointer;
+}

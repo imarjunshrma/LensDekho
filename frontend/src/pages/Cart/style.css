@@ -87,13 +87,15 @@
 }
 
 .price-card {
-    width: 100%;
+    /* width: 100%; */
     /* display: flex;
     justify-content: space-between; */
+    width: 35%;
     background-color: white;
     padding: 20px 40px;
     /* align-items: center; */
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .05);
+    position: fixed;
 
 }
 
@@ -146,12 +148,17 @@
     gap: 10px;
     background-color: white;
     transition: all 0.5s;
-    width: 60%;
+    width: 80%;
+    height: 40px;
 }
 
 .last .rm-bag:hover {
     background-color: black;
     color: white;
+}
+
+.cartcardwrap .last .rm-bag {
+    width: 100%;
 }
 
 .last .wishlist {

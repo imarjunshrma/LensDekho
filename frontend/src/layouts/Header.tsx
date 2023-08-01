@@ -2,11 +2,12 @@ import './Header.css';
 import { HiOutlineShoppingBag } from "react-icons/hi";
 import { CiSearch } from "react-icons/ci";
 import { BsBookmarkHeart } from "react-icons/bs";
-import { useSelector } from 'react-redux';
+import { useRecoilValue } from 'recoil';
+import { cartState, wishListState } from '../state/atoms';
 import { useNavigate } from 'react-router-dom';
 const Header = () => {
-    const value = useSelector(state => state.cart.data)
-    // console.log(value)
+    const value = useRecoilValue(cartState);
+    const wishList = useRecoilValue(wishListState);
     const navigate = useNavigate();
     return (
         <header className="header">
@@ -30,13 +31,18 @@ const Header = () => {
                     </div>
 
                     <ul className="items">
-                        <li className="wishlist">
-                            <BsBookmarkHeart />
+                        <li >
+                            <span>
+                                {wishList.length}
+                            </span>
+                            <i className="wishlist">
+                                <BsBookmarkHeart />
+                            </i>
                         </li>
                         <li>
-                            {/* <span>
+                            <span>
                                 {value.length}
-                            </span> */}
+                            </span>
                             <i className="cart" onClick={() => navigate('/cart')}>
                                 <HiOutlineShoppingBag />
                             </i>

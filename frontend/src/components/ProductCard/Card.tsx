@@ -1,13 +1,14 @@
 import { BsBookmarkHeart, BsStarFill } from 'react-icons/bs';
 import './style.css';
-import { addToBag } from '../../features/cartSlice';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import ButtonSpinner from '../../layouts/spinner/ButtonSpinner';
 import Toast from '../../layouts/toast/Toast';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { cartState, wishListState } from '../../state/atoms';
+import { addToCart } from '../../utils/cartUtiles';
+import { addRemoveFromWishlist } from '../../utils/wishlistUtiles';
 export interface ApiResponse {
     brand: string,
     category: string,
@@ -26,18 +27,34 @@ export interface ApiResponse {
 const Card = (data: Partial<ApiResponse>) => {
     const { name, category, image, price, newPrice, rating } = data;
     const [isLoading, setIsLoading] = useState<boolean>(false)
-    const dispatch = useDispatch()
-    const val = useSelector(state => state.data)
+    const [isActive, setIsActive] = useState(false);
+    const recoilState = useRecoilState(cartState);
+    const wishListsState = useRecoilState(wishListState)
+    const wishListData = useRecoilValue(wishListState)
     const navigate = useNavigate()
-    const onClick = async (data: ApiResponse) => {
+    const onClick = (data: ApiResponse) => {
         setIsLoading(true);
-        await new Promise((resolve) => setTimeout(resolve, 400))
-        dispatch(addToBag(data))
-        toast("Item has been added in cart")
+        // await new Promise((resolve) => setTimeout(resolve, 400))
+        // dispatch(addToBag(data))
+        addToCart(recoilState, data)
+        // useAddToCart(data)
+        toast.success("Item has been added in cart")
         setIsLoading(false)
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        navigate("/cart");
+        // await new Promise((resolve) => setTimeout(resolve, 1000))
+        // navigate("/cart");
     }
+    const addItemInWishlist = () => {
+        addRemoveFromWishlist(wishListsState, data)
+    }
+    useEffect(() => {
+        for (let el of wishListData) {
+            if (el._id === data._id) {
+                setIsActive(true)
+                return;
+            }
+        }
+        setIsActive(false);
+    }, [wishListState, wishListData])
     return (
         <>
             <Toast />
@@ -75,9 +92,9 @@ const Card = (data: Partial<ApiResponse>) => {
                         <hr />
                         <div className="last">
                             <button className="rm-bag" onClick={() => onClick(data)}>
-                                {isLoading ? <ButtonSpinner /> : "Add to Bag"}
+                                {isLoading ? <ButtonSpinner size={20} /> : "Add to Bag"}
                             </button>
-                            <i className='wishlist'>
+                            <i className={`wishlist ${isActive ? "active-wishlist" : ""}`} onClick={() => addItemInWishlist(data)}>
                                 <BsBookmarkHeart />
                             </i>
                         </div>

@@ -1,16 +1,18 @@
 import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai'
 import { BsBookmarkHeart } from "react-icons/bs";
 import './style.css';
-import { useSelector } from 'react-redux';
 import { useMemo } from 'react'
-import { useDispatch } from 'react-redux';
-import { removeItemFromBag } from '../../features/cartSlice';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { cartState } from '../../state/atoms';
+import { addToCart, removeItemFromCart, removeToCart } from '../../utils/cartUtiles';
+import EmptyCard from '../../components/EmptyCard/EmptyCard';
 
 
 const CartCard = (data) => {
   // console.log(data)
-  const { image, name, price, newPrice, count, id } = data.data;
-  const dispatch = useDispatch();
+  const state = useRecoilState(cartState)
+  const { image, name, price, newPrice, count, _id } = data.data;
+
   return (
     <div className="cart-card my-4">
       <div className="card_items">
@@ -22,20 +24,20 @@ const CartCard = (data) => {
           <div className='quantity'>
             <span>Quantity:</span>
             <div className='d-flex'>
-              <span>
+              <span onClick={() => removeToCart(state, data.data)}>
                 <i><AiOutlineMinus /></i>
               </span>
               <span className='count'>
                 {count}
               </span>
-              <span>
+              <span onClick={() => addToCart(state, data.data)}>
                 <i><AiOutlinePlus /></i>
               </span>
 
             </div>
           </div>
           <div className="last">
-            <button className="rm-bag" onClick={() => dispatch(removeItemFromBag(id))}>
+            <button className="rm-bag" onClick={() => removeItemFromCart(state, _id)}>
               Remove From Bag
             </button>
             <i className='wishlist'>
@@ -56,7 +58,7 @@ const CartCard = (data) => {
 const PriceCard = ({ data }) => {
 
   const total = useMemo(() => {
-    let total = data?.reduce((current, val) => current + val.count * val.newPrice, 0)
+    const total = data?.reduce((current, val) => current + val.count * val.newPrice, 0)
     return total;
   }, [data]);
   // console.log(total)
@@ -88,29 +90,37 @@ const PriceCard = ({ data }) => {
   )
 }
 const Cart = () => {
-  const value = useSelector(state => state.cart.data)
-
+  const value = useRecoilValue(cartState);
+  const [state, setState] = useRecoilState(cartState)
   return (
     <>
       <div className="cart-section">
         <div className="container pr">
-          <h5>Bag(1)</h5>
-          <div className="bag-items">
-            <div className='first'>
-              {
-                value?.map(val => {
-                  const { name, price, newPrice, image, count, id } = val;
-                  return (
-                    <CartCard data={{ name, price, newPrice, image, count, id }} />
-                  )
-                })
-              }
-            </div>
-            <div className="price-details">
-              <PriceCard data={value} />
+          {
+            state.length ? (
+              <>
+                <h5>Bag({value.length})</h5>
+                <div className="bag-items">
+                  <div className='first cartcardwrap'>
+                    {
+                      value?.map(val => {
+                        const { name, price, newPrice, image, count, _id } = val;
+                        return (
+                          <CartCard data={{ name, price, newPrice, image, count, _id }} />
+                        )
+                      })
+                    }
+                  </div>
+                  <div className="price-details">
+                    <PriceCard data={value} />
 
-            </div>
-          </div>
+                  </div>
+                </div>
+
+              </>
+            ) : <EmptyCard />
+          }
+
         </div>
       </div>
     </>
