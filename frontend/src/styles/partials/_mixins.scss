@@ -1,0 +1,8 @@
+
+
+@mixin dark_heading{
+    color: transparent;
+    background: $dark-heading-color;
+    -webkit-background-clip: text;
+     background-clip: text;
+}

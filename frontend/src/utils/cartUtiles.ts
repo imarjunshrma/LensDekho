@@ -1,4 +1,4 @@
-import { ApiResponse } from "../components/ProductCard/Card";
+import { ApiResponse } from "../components/ProductCard/ProductCard";
 
 class CartUtils {
     addToCart = (recoilState, data: ApiResponse) => {

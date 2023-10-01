@@ -1,4 +1,4 @@
-import './Header.css';
+import '@/styles/layouts/header.scss';
 import { HiOutlineShoppingBag } from "react-icons/hi";
 import { CiSearch } from "react-icons/ci";
 import { BsBookmarkHeart } from "react-icons/bs";
@@ -35,7 +35,7 @@ const Header = () => {
                             <span>
                                 {wishList.length}
                             </span>
-                            <i className="wishlist">
+                            <i className="wishlist" onClick={() => navigate("/wishlist")}>
                                 <BsBookmarkHeart />
                             </i>
                         </li>

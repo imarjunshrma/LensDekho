@@ -1,10 +1,10 @@
 import { Route, Routes } from "react-router-dom";
-import Home from "../pages/Home/Home";
-import Product from "../pages/Product/Product";
-import ProductDetail from "../pages/ProductId/ProductDetail";
-import Cart from "../pages/Cart/Cart";
 import Main from "./Main";
-import Wishlist from "../pages/Wishlist/Wishlist";
+import Cart from "@/pages/Cart";
+import Home from "@/pages/Home";
+import Product from "@/pages/Product";
+import ProductDetail from "@/pages/ProductDetail";
+import Wishlist from "@/pages/Wishlist";
 
 const Layout = () => {
   return (

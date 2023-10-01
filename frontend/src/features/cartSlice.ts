@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from '@reduxjs/toolkit'
-import { ApiResponse } from "../components/ProductCard/Card";
+import { ApiResponse } from "../components/ProductCard";
 interface InitialState {
     data: ApiResponse | []
 }

@@ -1,0 +1,50 @@
+@import "../partials/partials";
+
+.c-btn{
+    border: 1px solid $buttonPrimary; /* Blue border color */
+    background-color: $buttonPrimary; /* Blue background color */
+    padding: 12px 24px; /* Adjust padding as needed */
+    font-size: 14px; /* Adjust font size as needed */
+    font-weight: medium; /* Adjust font weight as needed */
+    text-align: center;
+    text-decoration: none;
+    border-radius: 4px; /* Adjust border-radius as needed */
+    transition: all 0.3s ease;
+    color: #fff; /* White text color */
+    &.-primary{
+        color: #fff; /* White text color */
+        background-color: $buttonPrimary;
+        border-color: $buttonPrimary;
+        &:hover{
+            background-color: $buttonPrimaryHover;
+        }
+    }
+    &.-secondary{
+        color: $buttonPrimary; /* White text color */
+        background-color: $buttonSecondary;
+        border-color: $buttonSecondary;
+        &:hover{
+            background-color: $buttonSecondaryHover;
+        }
+    }
+}
+
+.dark-mode{
+    .c-btn{
+        &.-primary{
+            background-color: $darkButtonPrimary;
+            border-color: $darkButtonPrimary;
+            &:hover{
+                background-color: transparent;
+            }
+        }
+        &.-secondary{
+            color: #fff; /* White text color */
+            background-color: transparent;
+            border-color: $darkButtonPrimary;
+            &:hover{
+                background-color: $darkButtonPrimary;
+            }
+        }
+    }
+}

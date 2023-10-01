@@ -1,7 +1,7 @@
-
+import { ApiResponse } from "../components/ProductCard/ProductCard";
 
 class WishlistUtils {
-    addRemoveFromWishlist = (recoilState, data: ApiResponse) => {
+    addRemoveFromWishlist = (recoilState, data: Partial<ApiResponse>) => {
         const [state, setState] = recoilState;
         const isStateEmpty = state.length === 0;
         if (isStateEmpty) {
@@ -22,5 +22,5 @@ class WishlistUtils {
 }
 
 const Wishlist = new WishlistUtils();
-export const addRemoveFromWishlist = Wishlist.addRemoveFromWishlist;;
+export const addRemoveFromWishlist = Wishlist.addRemoveFromWishlist;
 

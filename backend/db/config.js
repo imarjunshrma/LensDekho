@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
-const url =
-  "mongodb+srv://arjunsharma12ka4:LwlmjEoCAHHrYwfp@cluster0.2w8hlz2.mongodb.net/LensDekho";
+require("dotenv").config();
+const url = process.env.DB_USER;
 const connectDB = async () => {
   try {
     await mongoose.connect(url, {

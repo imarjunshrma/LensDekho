@@ -1,19 +1,20 @@
 
 import { BrowserRouter } from 'react-router-dom';
-import './App.css'
 import Route from './Route/Layout';
 import Header from './layouts/Header';
 import { useEffect, useState } from 'react';
-import Spinner from './layouts/spinner/Spinner';
+import Spinner from './layouts/Spinner';
+
 
 
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
-    // setIsLoading(true);
+    setIsLoading(true);
+    // document.body.classList.add('dark-mode')
     setTimeout(() => {
-      // setIsLoading(false)
+      setIsLoading(false)
     }, 6000)
   }, [])
   return (
