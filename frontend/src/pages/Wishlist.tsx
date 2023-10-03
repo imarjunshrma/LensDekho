@@ -1,6 +1,7 @@
 import { useRecoilState } from "recoil";
-import Card, { ApiResponse } from "@/components/ProductCard";
+import Card from "@/components/ProductCard";
 import '@/styles/pages/wishlist.scss';
+import { ApiResponse } from "@/interfaces";
 import { wishListState } from "@/state/atoms";
 
 const Wishlist = () => {
@@ -13,8 +14,8 @@ const Wishlist = () => {
                         <h3 className="heading">Wishlist !</h3>
                         <div className="row">
                             {
-                                state.map((data: ApiResponse) => (
-                                    <div className="col-lg-3 px-0">
+                                state.map((data: ApiResponse, index: number) => (
+                                    <div className="col-lg-3 px-0" key={index}>
                                         <Card {...data} />
                                     </div>
                                 ))

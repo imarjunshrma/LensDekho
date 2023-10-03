@@ -1,4 +1,3 @@
-import { BsGithub, BsLinkedin } from 'react-icons/bs';
 import '@/styles/layouts/footer.scss';
 
 const Footer = () => {

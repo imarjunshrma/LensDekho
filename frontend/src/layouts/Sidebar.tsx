@@ -2,14 +2,9 @@ import '@/styles/layouts/sidebar.scss';
 import { Dispatch, SetStateAction } from 'react'
 // import { IoCloseOutline } from 'react-icons/io5'
 import { MdOutlineClose } from 'react-icons/md'
-import { QueryTuple } from '../../pages/Product/Product';
-interface Query {
-    gender: string,
-    category: string,
-    rating: string,
-    price: string
-}
-const Sidebar = ({ setIsOpenSidebar, query, setQuery }: { setIsOpenSidebar: Dispatch<SetStateAction<boolean>>, query: QueryTuple, setQuery: Dispatch<SetStateAction<Query>> }) => {
+import { QueryTuple } from '@/interfaces';
+
+const Sidebar = ({ setIsOpenSidebar, query, setQuery }: { setIsOpenSidebar: Dispatch<SetStateAction<boolean>>, query: QueryTuple, setQuery: Dispatch<SetStateAction<QueryTuple>> }) => {
 
 
     const onClick = () => {

@@ -49,3 +49,20 @@
     }
   }
   
+  .empty-state{
+    padding: 40px 0;
+    text-align: center;
+   h5{
+    font-size: 40px;
+    font-weight: 600;
+   }
+
+  }
+  .empty-spinner{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    // height: calc(var(--viewPortHeight) - 62px);
+    height: calc(100vh - calc(80px + 52px))
+}

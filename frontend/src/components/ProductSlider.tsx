@@ -14,8 +14,8 @@ const ProductSlider = () => {
             navClass={["prevNavIcon", "nextNavIcon"]}
         >
             {
-                data.map((image) => (
-                    <div class='item'>
+                data.map((image, index) => (
+                    <div className='item' key={index}>
                         <img src={image} alt="" />
                     </div>
 

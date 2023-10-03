@@ -1,5 +1,5 @@
 import {
-    atom,selector, useRecoilState, useRecoilValue, useSetRecoilState
+    atom
 } from 'recoil';
 
 
@@ -11,6 +11,16 @@ export const cartState=atom({
 export const wishListState=atom({
     key:"wishlist",
     default:[]
+})
+
+export const searchResultState=atom({
+    key:'searchResult',
+    default:{}
+})
+
+export const inputValue=atom({
+    key:"inputvalue",
+    default:""
 })
 // export const addToCart=()=>{
 

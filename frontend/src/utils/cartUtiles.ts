@@ -1,7 +1,7 @@
-import { ApiResponse } from "../components/ProductCard/ProductCard";
+import { ApiResponse } from "@/interfaces";
 
 class CartUtils {
-    addToCart = (recoilState, data: ApiResponse) => {
+    addToCart = (recoilState, data: Partial<ApiResponse>) => {
         const [state, setState] = recoilState;
         const isStateEmpty = state.length === 0;
         if (isStateEmpty) {

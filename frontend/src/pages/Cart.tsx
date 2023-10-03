@@ -66,10 +66,10 @@ const PriceCard = ({ data }) => {
     <div className='price-card'>
       <h4>Price Details</h4>
       {
-        data?.map(val => {
+        data?.map((val, index) => {
           const { name, newPrice, count } = val;
           return (
-            <div>
+            <div key={index}>
               <p>{name} ({count})item</p>
               <p>₹ {count * newPrice}</p>
             </div>
@@ -91,7 +91,7 @@ const PriceCard = ({ data }) => {
 }
 const Cart = () => {
   const value = useRecoilValue(cartState);
-  const [state, setState] = useRecoilState(cartState)
+  const [state] = useRecoilState(cartState)
   return (
     <>
       <div className="cart-section">
@@ -103,10 +103,11 @@ const Cart = () => {
                 <div className="bag-items">
                   <div className='first cartcardwrap'>
                     {
-                      value?.map(val => {
+                      value?.map((val, index) => {
                         const { name, price, newPrice, image, count, _id } = val;
                         return (
-                          <CartCard data={{ name, price, newPrice, image, count, _id }} />
+                          <CartCard data={{ name, price, newPrice, image, count, _id }} key={index}
+                          />
                         )
                       })
                     }

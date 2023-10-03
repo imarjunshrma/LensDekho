@@ -10,21 +10,9 @@ import { addToCart } from '@/utils/cartUtiles';
 import { cartState, wishListState } from '@/state/atoms';
 import { addRemoveFromWishlist } from '@/utils/wishlistUtiles';
 import ButtonSpinner from '@/layouts/ButtonSpinner';
-interface ApiResponse {
-    brand: string,
-    category: string,
-    description: string,
-    gender: string,
-    image: string,
-    name: string,
-    newPrice: string,
-    price: string,
-    qty: string,
-    quantity: string,
-    rating: string,
-    weight: string,
-    _id: string
-}
+import { API_URL } from '@/constant/apiConstant';
+import { ApiResponse } from '@/interfaces';
+
 const ProductDetail = () => {
     const { id } = useParams<{ id: string | undefined }>()
     const [data, setData] = useState<ApiResponse[] | []>([])
@@ -36,7 +24,7 @@ const ProductDetail = () => {
     useEffect(() => {
         const fetchProducts = async (): Promise<void> => {
             try {
-                const res: AxiosResponse<{ response: ApiResponse[] }> = await axios.get<{ response: ApiResponse[] }>(`http://localhost:3004/lens/${id}`)
+                const res: AxiosResponse<{ response: ApiResponse[] }> = await axios.get<{ response: ApiResponse[] }>(`${API_URL}/lens/${id}`)
                 if (res.data.response.length > 0) {
                     setData(res.data.response);
                 }
@@ -75,7 +63,7 @@ const ProductDetail = () => {
     return (
         <div>
             {
-                data.length ? data.map((val: ApiResponse) => <div className='product_container'>
+                data.length ? data.map((val: ApiResponse, index: number) => <div className='product_container' key={index}>
                     <div className="container pr px">
                         <div className="crow">
                             <div className="ccol col_">

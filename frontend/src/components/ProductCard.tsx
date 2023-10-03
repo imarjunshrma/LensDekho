@@ -9,21 +9,8 @@ import { cartState, wishListState } from '@/state/atoms';
 import { addToCart } from '@/utils/cartUtiles';
 import { addRemoveFromWishlist } from '@/utils/wishlistUtiles';
 import Toast from '@/layouts/Toast';
-export interface ApiResponse {
-    brand: string,
-    category: string,
-    description: string,
-    gender: string,
-    image: string,
-    name: string,
-    newPrice: string,
-    price: string,
-    qty: string,
-    quantity: string,
-    rating: string,
-    weight: string,
-    _id: string
-}
+import { ApiResponse } from '@/interfaces';
+
 const Card = (data: Partial<ApiResponse>) => {
     const { name, category, image, price, newPrice, rating } = data;
     const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -37,7 +24,7 @@ const Card = (data: Partial<ApiResponse>) => {
 
     const navigate = useNavigate()
 
-    const onClick = (data: ApiResponse) => {
+    const onClick = (data: Partial<ApiResponse>) => {
         setIsLoading(true);
         //if recoil state already have that state then he navigate on cart page
         const isTrue = recoilState[0].findIndex(val => val._id === data._id);
@@ -79,8 +66,11 @@ const Card = (data: Partial<ApiResponse>) => {
     const getButtonText = (): string => {
         return checkOutCart ? "Go to Cart" : "Add to Bag"
     }
-    const wishListButtonStyles = (): { gap: number, justifyContent: string } => {
-        const styles: { gap: number, justifyContent: string } = {};
+    const wishListButtonStyles = (): { gap: number, justifyContent: string } | {} => {
+        let styles: { gap: number | string, justifyContent: string } = {
+            gap: 'unset',
+            justifyContent: 'unset'
+        };
         if (location.pathname === "/wishlist") {
             styles.gap = 0;
             styles.justifyContent = "center"
@@ -128,7 +118,7 @@ const Card = (data: Partial<ApiResponse>) => {
                                 {isLoading ? <ButtonSpinner size={20} /> : getButtonText()}
                             </button>
                             {
-                                location.pathname === "/wishlist" ? "" : <i className={`wishlist ${isActive ? "active-wishlist" : ""}`} onClick={() => addItemInWishlist(data)}>
+                                location.pathname === "/wishlist" ? "" : <i className={`wishlist ${isActive ? "active-wishlist" : ""}`} onClick={() => addItemInWishlist()}>
                                     <BsBookmarkHeart />
                                 </i>
                             }

@@ -1,4 +1,5 @@
-import { ApiResponse } from "../components/ProductCard/ProductCard";
+
+import { ApiResponse } from "@/interfaces";
 
 class WishlistUtils {
     addRemoveFromWishlist = (recoilState, data: Partial<ApiResponse>) => {

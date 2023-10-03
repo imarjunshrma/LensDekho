@@ -2,26 +2,65 @@ import '@/styles/layouts/header.scss';
 import { HiOutlineShoppingBag } from "react-icons/hi";
 import { CiSearch } from "react-icons/ci";
 import { BsBookmarkHeart } from "react-icons/bs";
-import { useRecoilValue } from 'recoil';
-import { cartState, wishListState } from '../state/atoms';
-import { useNavigate } from 'react-router-dom';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { cartState, inputValue, searchResultState, wishListState } from '../state/atoms';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { API_URL } from '@/constant/apiConstant';
+import { Link } from 'react-router-dom';
 const Header = () => {
     const value = useRecoilValue(cartState);
     const wishList = useRecoilValue(wishListState);
     const navigate = useNavigate();
+    const [timer, setTimer] = useState(null);
+    const [input, setInput] = useRecoilState(inputValue);
+    const [, setSearchResult] = useRecoilState(searchResultState);
+    const location = useLocation();
+    const makeApiCall = async () => {
+        const res = await axios.get(`${API_URL}/lens/search?name=${input}`);
+        setSearchResult(res.data);
+        if (location.pathname !== "/products") {
+            navigate("/products")
+        }
+        //.data
+    }
+    useEffect(() => {
+        if (!input.length) return;
+        if (timer) {
+            clearTimeout(timer); // Clear any previous timer
+        }
+        // Set a new timer to make the API call after 1000 milliseconds (1 seconds)
+        const newTimer = setTimeout(() => {
+            // Call your API function here
+            makeApiCall();
+        }, 900);
+        // Update the timer state with the new timer
+        setTimer(newTimer);
+        // Clean up the timer when the component unmounts
+        return () => {
+            if (timer) {
+                clearTimeout(timer);
+            }
+        };
+    }, [input]);
+
     return (
         <header className="header">
             <nav className="container nav_ pr">
-                <div className="logo">
-                    <img src="https://eyesome.netlify.app/static/media/defaultUser.8fe8d848d6ce42e30435.png" alt="" />
-                </div>
+                <Link className="logo" to="/">
+                    <img src="/avtaar.svg" alt="" />
+                </Link>
                 <div className="search-box">
-                    <form action="">
-                        <input type="search" name="" id="" placeholder='Search Glasses....' />
+                    <div>
+                        <input type="search" name="" id="" placeholder='Search Glasses....'
+                            value={input}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value)}
+                        />
                         <i className="search-icon">
                             <CiSearch />
                         </i>
-                    </form>
+                    </div>
                 </div>
                 <div className="items_">
                     <div className='explore_div'>

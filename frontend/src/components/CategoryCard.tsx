@@ -1,10 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import "@/styles/components/categoryCard.scss";
-interface Props {
-  title: string,
-  img: string
-}
-const Card = ({ title, img }: Props) => {
+import { CategoryCardProps } from '@/interfaces';
+
+const Card = ({ title, img }: CategoryCardProps) => {
   const navigate = useNavigate();
   return (
     <div className="c-card" onClick={() => navigate('/products', {

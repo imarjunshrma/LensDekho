@@ -1,9 +1,11 @@
 const { Products } = require("../models");
-
+const Fuse = require('fuse.js');
+const isDevelopment = process.env.NODE_ENV === 'development';
 const getLensesData = async (req, res) => {
   try {
     const response = await Products.find({});
-    const baseUrl = `${req.protocol}://${req.hostname}:${req.socket.localPort}`;
+
+    const baseUrl = `${req.protocol}://${req.get('host')}`;
     for (let resp of response) {
       resp.image = baseUrl + resp.image;
     }
@@ -19,7 +21,7 @@ const getLensesDataById = async (req, res) => {
     if (!response.length) {
       return res.status(200).json({ msg: [], success: false });
     }
-    const baseUrl = `${req.protocol}://${req.hostname}:${req.socket.localPort}`;
+    const baseUrl = `${req.protocol}://${req.get('host')}`;
     for (let resp of response) {
       resp.image = baseUrl + resp.image;
     }
@@ -37,7 +39,7 @@ const getLensesDataByFilter = async (req, res) => {
     filter.category = category;
   }
   if (gender) {
-    if (!gender === "All") {
+    if (gender !== "All") {
       filter.gender = gender;
     }
   }
@@ -64,7 +66,7 @@ const getLensesDataByFilter = async (req, res) => {
       return res.status(200).json({ msg: [], success: false });
     }
 
-    const baseUrl = `${req.protocol}://${req.hostname}:${req.socket.localPort}`;
+    const baseUrl = `${req.protocol}://${req.get('host')}`;
     for (let resp of response) {
       resp.image = baseUrl + resp.image;
     }
@@ -87,9 +89,40 @@ const addDataIntoDatabase = async (req, res) => {
     return res.status(500).json({ msg: err, success: false });
   }
 };
+
+const getLensesDataBySearch = async (req, res) => {
+  const searchQuery = req.query.name.toLowerCase();
+  const fuseOptions = {
+    isCaseSensitive: false,
+    shouldSort: true,
+    minMatchCharLength: 3,
+    keys: ['name'], // Specify the keys to search within
+  };
+
+  // for (let resp of response) {
+  //   resp.image = baseUrl + resp.image;
+  // }
+  // if(isDevelopment)
+  const baseUrl = `${req.protocol}://${req.get('host')}`;
+  try {
+    // Perform a fuzzy search with fuse.js
+    const results = await Products.find({});
+    const fuse = new Fuse(results, fuseOptions);
+    const response = fuse.search(searchQuery)
+    for (let resp of response) {
+      resp.item.image = baseUrl + resp.item.image;
+    }
+    res.status(200).json({ success: true, data: response });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ msg: 'Server error', success: false });
+  }
+};
+
 module.exports = {
   getLensesData,
   addDataIntoDatabase,
   getLensesDataById,
   getLensesDataByFilter,
+  getLensesDataBySearch
 };

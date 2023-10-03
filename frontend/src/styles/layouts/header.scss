@@ -1,3 +1,5 @@
+@import "../partials/partials";
+
 .header {
     position: fixed;
     left: 0;
@@ -41,7 +43,7 @@
 
 .items_ button {
     border: transparent;
-    background-color: #a16207;
+    background-color: $secondaryColor;
     padding: 4px 10px;
     border-radius: 5px;
     color: white;
@@ -97,7 +99,7 @@
 }
 
 .items .cart {
-    background-color: #eab308;
+    background-color: $secondaryColor;
     color: white;
 }
 
@@ -111,7 +113,7 @@
     width: 35%;
 }
 
-.search-box form {
+.search-box div {
     padding: 6px 20px;
 
     border: 1px solid #e8e7e5;

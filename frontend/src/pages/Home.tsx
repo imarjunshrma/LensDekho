@@ -4,6 +4,7 @@ import Cards from "@/components/Cards";
 import Card from "@/components/CategoryCard";
 import HeroSection from "@/components/HeroSection";
 import axios from "axios";
+import { API_URL } from "@/constant/apiConstant";
 
 const category = [
   {
@@ -20,9 +21,9 @@ const category = [
 ]
 const Home = () => {
   const [data, setData] = useState([])
-  const fetchProducts = async (): any => {
+  const fetchProducts = async () => {
     try {
-      const res = await axios.get("http://localhost:3004/lens")
+      const res = await axios.get(`${API_URL}/lens`)
       const datax = res.data.msg;
       datax.length = 7;
       setData(datax)
@@ -45,10 +46,10 @@ const Home = () => {
               <h2 className='head'>Trending Products</h2>
             </div>
             {
-              data.map(val => {
+              data.map((val, index) => {
                 const { name, category, price, image, _id } = val
                 return (
-                  <div className="col-3 my-4">
+                  <div className="col-3 my-4" key={index}>
                     <Cards name={name} category={category} price={price} image={image} id={_id} />
                   </div>
                 )
@@ -64,9 +65,9 @@ const Home = () => {
           <h3 className='text-center head'>Categories</h3>
           <div className="row">
             {
-              category.map(val => {
+              category.map((val, index) => {
                 return (
-                  <div className="col-4">
+                  <div className="col-4" key={index}>
                     <Card title={val.title} img={val.img} />
                   </div>
                 )

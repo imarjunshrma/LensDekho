@@ -2,14 +2,9 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { BsCurrencyRupee } from "react-icons/bs";
 import "@/styles/components/card.scss"
 import { NavigateFunction, useNavigate } from "react-router-dom";
-interface Props {
-  name: string,
-  category: string,
-  price: string,
-  image: string,
-  id: string
-}
-const Cards = ({ name, category, price, image, id }: Props) => {
+import { CardProps } from "@/interfaces";
+
+const Cards = ({ name, category, price, image, id }: CardProps) => {
   const navigate: NavigateFunction = useNavigate()
   const onClick = (id: string) => {
     // console.log(id)
